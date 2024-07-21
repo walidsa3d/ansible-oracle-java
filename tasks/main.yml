@@ -1,2 +1,57 @@
 ---
-# tasks file for oracle-java
+- name: Ensure the dependencies are installed
+  apt:
+    name: 
+      - wget
+    state: present
+    update_cache: true
+
+- name: Download Oracle Java 21
+  get_url:
+    url: https://download.oracle.com/java/21/latest/jdk-21_linux-x64_bin.deb
+    dest: /tmp/jdk-21_linux-x64_bin.deb
+
+- name: Install Oracle Java 21
+  apt:
+    deb: /tmp/jdk-21_linux-x64_bin.deb
+
+- name: Ensure JAVA_HOME is set in environment variables
+  lineinfile:
+    path: /etc/environment
+    regexp: '^JAVA_HOME='
+    line: 'JAVA_HOME=/usr/lib/jvm/jdk-21'
+
+- name: Load the environment variables
+  shell: source /etc/environment
+  args:
+    executable: /bin/bash
+
+- name: Update alternatives for java
+  alternatives:
+    name: java
+    link: /usr/bin/java
+    path: /usr/lib/jvm/jdk-21/bin/java
+    priority: 1
+
+- name: Update alternatives for javac
+  alternatives:
+    name: javac
+    link: /usr/bin/javac
+    path: /usr/lib/jvm/jdk-21/bin/javac
+    priority: 1
+
+- name: Update alternatives for javaws
+  alternatives:
+    name: javaws
+    link: /usr/bin/javaws
+    path: /usr/lib/jvm/jdk-21/bin/javaws
+    priority: 1
+    ignore_errors: true
+
+- name: Check Java version
+  command: java -version
+  register: java_version_output
+
+- name: Display Java version
+  debug:
+    msg: "{{ java_version_output.stdout }}"
