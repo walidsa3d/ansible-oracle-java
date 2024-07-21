@@ -1,0 +1,11 @@
+- name: Verify
+  hosts: all
+  tasks:
+    - name: Check Java version
+      command: java -version
+      register: java_version_output
+      ignore_errors: yes
+
+    - name: Display Java version
+      debug:
+        msg: "{{ java_version_output.stdout }}"
