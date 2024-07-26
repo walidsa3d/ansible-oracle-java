@@ -1,5 +1,5 @@
 galaxy_info:
-  role_name: ansible_oracle_java
+  role_name: oracle_java
   author: walidsa3d
   description: Install Oracle Java on ubuntu
   license: MIT

@@ -1,33 +1,39 @@
 # Ansible Role: Oracle_Java
 
 An Ansible role that installs Oracle Java on Ubuntu.
+![Ansible Role](https://img.shields.io/ansible/role/d/walidsa3d/oracle_java)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/walidsa3d/oracle_java/main.yml)
 
-## Requirements
+Install
+------------
+```
+ansible-galaxy role install walidsa3d.oracle_java
+
+```
+Requirements
+------------
 
 None.
 
-## Role Variables
+Role Variables
+------------
 
 Available variables are listed below, along with default values:
 
 ```yaml
 java_version: 21
 ```
-# Example Playbook
-To install this role, create a playbook as follows:
+
+Example Playbook
+------------
+To use this role, create a playbook as follows:
 
 ```yaml
 ---
 - hosts: all
   become: yes
   roles:
-    - role: oracle_java
-```
-
-Run the playbook with:
-
-```yaml
-ansible-playbook -i your_inventory_file playbook.yml
+    - role: walidsa3d.oracle_java
 ```
 
 # License
