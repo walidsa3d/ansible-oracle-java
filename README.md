@@ -2,7 +2,7 @@
 
 An Ansible role that installs Oracle Java on Ubuntu.
 ![Ansible Role](https://img.shields.io/ansible/role/d/walidsa3d/oracle_java)
-![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/walidsa3d/oracle_java/main.yml)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/walidsa3d/ansible-oracle-java/main.yml)
 
 Install
 ------------
