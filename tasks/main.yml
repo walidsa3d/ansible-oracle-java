@@ -1,47 +1,47 @@
 ---
 - name: Ensure the dependencies are installed
-  apt:
+  ansible.builtin.apt:
     name: 
       - wget
     state: present
     update_cache: true
 
 - name: Download Oracle Java
-  get_url:
+  ansible.builtin.get_url:
     url: https://download.oracle.com/java/{{java_version}}/latest/jdk-{{java_version}}_linux-x64_bin.deb
     dest: /tmp/jdk-21_linux-x64_bin.deb
 
 - name: Install Oracle Java 
-  apt:
+  ansible.builtin.apt:
     deb: /tmp/jdk-{{java_version}}_linux-x64_bin.deb
 
 - name: Ensure JAVA_HOME is set in environment variables
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/environment
     regexp: '^JAVA_HOME='
     line: 'JAVA_HOME=/usr/lib/jvm/jdk-{{java_version}}'
 
 - name: Load the environment variables
-  shell: source /etc/environment
+  ansible.builtin.shell: source /etc/environment
   args:
     executable: /bin/bash
 
 - name: Update alternatives for java
-  alternatives:
+  community.general.alternatives:
     name: java
     link: /usr/bin/java
     path: /usr/lib/jvm/jdk-{{java_version}}/bin/java
     priority: 1
 
 - name: Update alternatives for javac
-  alternatives:
+  community.general.alternatives:
     name: javac
     link: /usr/bin/javac
     path: /usr/lib/jvm/jdk-{{java_version}}/bin/javac
     priority: 1
 
 - name: Update alternatives for javaws
-  alternatives:
+  community.general.alternatives:
     name: javaws
     link: /usr/bin/javaws
     path: /usr/lib/jvm/jdk-{{java_version}}/bin/javaws
@@ -49,7 +49,7 @@
     ignore_errors: true
 
 - name: Check Java version
-  command: java -version
+  ansible.builtin.command: java -version
   register: java_version_output
 
 - name: Display Java version
