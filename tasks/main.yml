@@ -40,14 +40,6 @@
     path: /usr/lib/jvm/jdk-{{java_version}}/bin/javac
     priority: 1
 
-- name: Update alternatives for javaws
-  community.general.alternatives:
-    name: javaws
-    link: /usr/bin/javaws
-    path: /usr/lib/jvm/jdk-{{java_version}}/bin/javaws
-    priority: 1
-    ignore_errors: true
-
 - name: Check Java version
   ansible.builtin.command: java -version
   register: java_version_output
