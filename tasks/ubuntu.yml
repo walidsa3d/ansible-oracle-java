@@ -14,19 +14,34 @@
   ansible.builtin.unarchive:
     src: "/tmp/jdk-{{ java_version }}_linux-x64_bin.tar.gz"
     dest: "{{ java_install_dir }}"
-    creates: "{{ java_install_dir }}/jdk-{{java_version}}"
     remote_src: true
-  register: java_insta_dir
 
-- name: show install dir
-  ansible.builtin.debug:
-    msg: "{{java_insta_dir.dest}}"
+- name: Find the extracted JDK directory
+  find:
+    paths: "{{ java_install_dir }}"
+    file_type: directory
+    use_regex: true
+    patterns: 'jdk-21.*'
+  register: found_jdk_directory
+
+- name: Rename extracted folder
+  command: mv {{ item.path }} /usr/bin/java/jdk-{{java_version}}
+  loop: "{{ found_jdk_directory.files }}"
+  when: found_jdk_directory.matched > 0
 
 - name: Update alternatives for java
-  ansible.builtin.command: update-alternatives --install /usr/bin/java java {{ java_insta_dir.dest }}/bin/java 1
+  community.general.alternatives:
+    name: java
+    link: /usr/bin/java
+    path: /usr/lib/jvm/jdk-{{java_version}}/bin/java
+    priority: 1
 
 - name: Update alternatives for javac
-  ansible.builtin.command: update-alternatives --install /usr/bin/javac javac {{ java_insta_dir.dest }}/bin/javac 1
+  community.general.alternatives:
+    name: javac
+    link: /usr/bin/javac
+    path: /usr/lib/jvm/jdk-{{java_version}}/bin/javac
+    priority: 1
 
 - name: Set Oracle Java as the default
   ansible.builtin.command: update-alternatives --set java {{ java_insta_dir.dest}}/bin/java
