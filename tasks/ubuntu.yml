@@ -17,6 +17,10 @@
     remote_src: true
   register: java_insta_dir
 
+- name: show install dir
+  ansible.builtin.debug:
+    msg: "{{java_insta_dir.dest}}"
+
 - name: Update alternatives for java
   ansible.builtin.command: update-alternatives --install /usr/bin/java java {{ java_insta_dir.dest }}/bin/java 1
 
