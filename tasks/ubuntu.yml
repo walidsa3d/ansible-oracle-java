@@ -15,25 +15,26 @@
     src: "/tmp/jdk-{{ java_version }}_linux-x64_bin.tar.gz"
     dest: "{{ java_install_dir }}"
     remote_src: true
+  register: java_insta_dir
 
 - name: Update alternatives for java
-  ansible.builtin.command: update-alternatives --install /usr/bin/java java {{ java_extracted_dir }}/bin/java 1
+  ansible.builtin.command: update-alternatives --install /usr/bin/java java {{ java_insta_dir.dest }}/bin/java 1
 
 - name: Update alternatives for javac
-  ansible.builtin.command: update-alternatives --install /usr/bin/javac javac {{ java_extracted_dir }}/bin/javac 1
+  ansible.builtin.command: update-alternatives --install /usr/bin/javac javac {{ java_insta_dir.dest }}/bin/javac 1
 
 - name: Set Oracle Java as the default
-  ansible.builtin.command: update-alternatives --set java {{ java_extracted_dir }}/bin/java
+  ansible.builtin.command: update-alternatives --set java {{ java_insta_dir.dest}}/bin/java
 
 - name: Set Oracle Javac as the default
-  ansible.builtin.command: update-alternatives --set javac {{ java_extracted_dir }}/bin/javac
+  ansible.builtin.command: update-alternatives --set javac {{ java_insta_dir.dest }}/bin/javac
 
 - name: Set JAVA_HOME environment variable
   ansible.builtin.lineinfile:
     path: /etc/profile.d/java.sh
     state: present
     create: true
-    line: "export JAVA_HOME={{ java_extracted_dir }}"
+    line: "export JAVA_HOME={{ java_insta_dir.dest }}"
     mode: '0755'
 
 - name: Load the JAVA_HOME environment variable
