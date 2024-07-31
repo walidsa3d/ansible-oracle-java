@@ -1,5 +1,5 @@
 ---
-java_version: "21.0.4"
+java_version: "21"
 java_major_version: "21"
 java_url: "https://download.oracle.com/java/{{ java_version }}/latest/jdk-{{ java_version }}_linux-x64_bin.tar.gz"
 java_install_dir: "/usr/local/java"
