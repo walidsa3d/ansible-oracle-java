@@ -38,8 +38,8 @@
 
 - name: Load the JAVA_HOME environment variable
   ansible.builtin.shell: source /etc/profile.d/java.sh
-    args:
-      executable: /bin/bash
+  args:
+    executable: /bin/bash
 
 - name: Verify Java installation
   ansible.builtin.command: java -version
