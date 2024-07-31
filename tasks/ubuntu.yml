@@ -26,14 +26,14 @@
 
 - name: Create Java Dir
   ansible.builtin.file: 
-    path: /usr/bin/java/jdk-{{java_version}}
+    path: /opt/jdk/jdk-{{java_version}}
     state: directory 
     owner: root 
     group: root
     mode: '0755'
 
 - name: Rename extracted folder
-  command: mv {{ item.path }} /usr/bin/java/jdk-{{java_version}}
+  command: mv {{ item.path }} /opt/jdk/jdk-{{java_version}}
   loop: "{{ found_jdk_directory.files }}"
   when: found_jdk_directory.matched > 0
 
@@ -41,28 +41,22 @@
   community.general.alternatives:
     name: java
     link: /usr/bin/java
-    path: /usr/lib/jvm/jdk-{{java_version}}/bin/java
+    path: /opt/jdk/jvm/jdk-{{java_version}}/bin/java
     priority: 1
 
 - name: Update alternatives for javac
   community.general.alternatives:
     name: javac
     link: /usr/bin/javac
-    path: /usr/lib/jvm/jdk-{{java_version}}/bin/javac
+    path: /opt/jdk/jdk-{{java_version}}/bin/javac
     priority: 1
-
-- name: Set Oracle Java as the default
-  ansible.builtin.command: update-alternatives --set java {{ java_insta_dir.dest}}/bin/java
-
-- name: Set Oracle Javac as the default
-  ansible.builtin.command: update-alternatives --set javac {{ java_insta_dir.dest }}/bin/javac
 
 - name: Set JAVA_HOME environment variable
   ansible.builtin.lineinfile:
     path: /etc/profile.d/java.sh
     state: present
     create: true
-    line: "export JAVA_HOME={{ java_insta_dir.dest }}"
+    line: "export JAVA_HOME= /opt/jdk/jdk-{{java_version}}"
     mode: '0755'
 
 - name: Load the JAVA_HOME environment variable
