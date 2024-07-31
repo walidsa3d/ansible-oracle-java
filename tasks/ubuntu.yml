@@ -24,6 +24,14 @@
     patterns: 'jdk-21.*'
   register: found_jdk_directory
 
+- name: Create Java Dir
+  ansible.builtin.file: 
+    path: /usr/bin/java/jdk-{{java_version}}
+    state: directory 
+    owner: root 
+    group: root
+    mode: '0755'
+
 - name: Rename extracted folder
   command: mv {{ item.path }} /usr/bin/java/jdk-{{java_version}}
   loop: "{{ found_jdk_directory.files }}"
