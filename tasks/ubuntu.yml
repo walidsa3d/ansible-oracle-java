@@ -14,6 +14,7 @@
   ansible.builtin.unarchive:
     src: "/tmp/jdk-{{ java_version }}_linux-x64_bin.tar.gz"
     dest: "{{ java_install_dir }}"
+    creates: "{{ java_install_dir }}/jdk-{{java_version}}"
     remote_src: true
   register: java_insta_dir
 
